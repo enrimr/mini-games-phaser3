@@ -6,10 +6,18 @@ class PlayScene extends Phaser.Scene {
 
     create() {
         // Create game objects here
-        let background = this.add.image(400, 300, 'background'); // Asume que tu juego es de 800x600 px
-        background.setScale(2, 2); // Ajusta el tamaño de la imagen al doble de su tamaño original
+        this.add.image(400, 300, 'background'); // Asume que tu juego es de 800x600 px
+        this.player = new Player(this, 100, 100); // Crea el sprite del jugador
+        this.player.create(); // Inicializa los controles del jugador
 
-        let player = this.player = new Player(this, 100, 100); // Crea el sprite del jugador
+        // Crea una base estática en la parte inferior del juego
+        let ground = this.physics.add.staticGroup();
+        ground.create(400, this.sys.game.config.height - 25, 'ground'); // 'ground' es la key de la imagen de la base
+
+        //ground.create(400, 568, 'ground').setScale(2).refreshBody(); // Asume que 'ground' es la key de la imagen de la base
+          
+        // Habilita la colisión entre el jugador y la base
+        this.physics.add.collider(this.player, ground);
     }
 
     update() {
