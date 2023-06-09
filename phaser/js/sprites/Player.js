@@ -1,35 +1,50 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
 
-    constructor(scene, x, y) {
-        super(scene, x, y, 'player');
+    constructor(scene, x, y, cursors) {
+        super(scene, x, y, 'player', 1); // Starts on frame 4
+        this.cursors = cursors; // Assign cursor keys
 
-        // Ajusta el tamaño del sprite del jugador
-        this.setScale(0.25); // Reduce el tamaño del jugador a la mitad
+        // Player properties and settings go here
+        scene.anims.create({
+            key: 'left',
+            frames: scene.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
+            frameRate: 10,
+            repeat: -1
+        });
 
-        // Habilita la física del cuerpo
-        this.scene.physics.world.enable(this);
-        
-        // Añade el jugador a la escena
-        this.scene.add.existing(this);
-    }
+        scene.anims.create({
+            key: 'turn',
+            frames: [{ key: 'player', frame: 25 }],
+            frameRate: 20
+        });
 
-    create() {
-        // Inicializa los controles del cursor
-        this.cursors = this.scene.input.keyboard.createCursorKeys();
+        scene.anims.create({
+            key: 'right',
+            frames: scene.anims.generateFrameNumbers('player', { start: 33, end: 35 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        scene.add.existing(this);
+        scene.physics.add.existing(this);
     }
 
     update() {
-        // Controla el movimiento del jugador con los cursores del teclado
+        // Player movement and behavior goes here
+        // Update the animation based on the player's movement
         if (this.cursors.left.isDown) {
             this.setVelocityX(-160);
+            this.anims.play('left', true);
         } else if (this.cursors.right.isDown) {
             this.setVelocityX(160);
+            this.anims.play('right', true);
         } else {
             this.setVelocityX(0);
+            this.anims.play('turn');
         }
 
         if (this.cursors.up.isDown && this.body.touching.down) {
-            this.setVelocityY(-300); // Ajusta la altura del salto
+            this.setVelocityY(-330);
         }
     }
 }
