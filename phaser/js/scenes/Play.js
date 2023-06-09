@@ -5,9 +5,26 @@ class PlayScene extends Phaser.Scene {
     }
 
     playerEnemyCollision(player, enemy) {
-        // Aquí es donde manejas lo que sucede cuando el jugador y el enemigo colisionan
-        console.log('El jugador ha colisionado con el enemigo!');
+        // Restar vida al jugador y al enemigo
+        player.decreaseHealth();
+        enemy.decreaseHealth();
+
+        enemy.life -= 10;
+    
+        console.log(`Vida del jugador: ${player.life}`);
+        console.log(`Vida del enemigo: ${enemy.life}`);
+    
+        // Comprobar si la vida del jugador o del enemigo ha llegado a 0
+        if (player.life <= 0) {
+            console.log('El jugador ha perdido!');
+            // Aquí podrías implementar la lógica para cuando el jugador pierde
+        }
+        if (enemy.life <= 0) {
+            console.log('El enemigo ha perdido!');
+            // Aquí podrías implementar la lógica para cuando el enemigo pierde
+        }
     }
+    
 
     
     create() {

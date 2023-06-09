@@ -3,6 +3,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, cursors) {
         super(scene, x, y, 'enemy', 1); // Starts on frame 4
         this.cursors = cursors; // Assign cursor keys
+        this.life = 50; // Vida inicial del enemigo
+        this.healthBar = new HealthBar(scene, x, y, 0xff0000);  // Rojo
+
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.setCollideWorldBounds(true); // El enemigo no saldrá de los límites del juego
@@ -36,5 +39,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         if (this.x < 50) { // Si el enemigo se sale del límite izquierdo de la pantalla
             this.x = 750; // Lo movemos al extremo derecho
         }
+
+        // Mover la barra de salud con el jugador
+        this.healthBar.x = this.x - 16;
+        this.healthBar.y = this.y - 20;
+        this.healthBar.draw();
+    }
+
+    decreaseHealth() {
+        this.life -= 20;
+        this.healthBar.decrease(20);
     }
 }
