@@ -1,11 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
+// Obtener el directorio raíz desde los argumentos de línea de comandos
+const rootDirectory = process.argv[2] || './';
+
 // Directorio de los archivos de entrada
-const inputDirectory = './';
+const inputDirectory = path.resolve(rootDirectory);
 
 // Archivo de salida
-const outputFile = './salida2.txt';
+const outputFile = './salida'+rootDirectory+'.txt';
 
 // Extensiones de archivos permitidas
 const allowedExtensions = ['.js', '.css'];  // Puedes modificar esta lista según tus necesidades

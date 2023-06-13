@@ -34,4 +34,8 @@ class HealthBar {
         this.bar.fillStyle(this.color);
         this.bar.fillRect(this.x, this.y, 32 * (this.value / 100), 4);
     }
+
+    destroy() {
+        this.bar.destroy();
+    }
 }
