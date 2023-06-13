@@ -10,6 +10,10 @@ class MenuScene extends Phaser.Scene {
     }
 
     create() {
+
+        this.input.keyboard.on('keydown-ENTER', function (event) {
+            this.scene.start('PlayScene');
+        }, this);
         
         const SIDplayer = this.plugins.get('SIDPlayerPlugin');
         let sidData = this.cache.binary.get(`tune`);

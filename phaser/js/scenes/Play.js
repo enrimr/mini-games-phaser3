@@ -62,6 +62,7 @@ class PlayScene extends Phaser.Scene {
         let platformWidth = 32;
         let platformHeight = 32;
     
+        console.log(this.physics.world.bounds.width)
         // Genera el mundo
         while (x < this.physics.world.bounds.width) {
             // Crea una plataforma en la posición actual
@@ -88,6 +89,13 @@ class PlayScene extends Phaser.Scene {
     }
     
     
+    collectPowerUp(player, powerUp) {
+        powerUp.disableBody(true, true); // Esconde y desactiva la caja de potenciador
+        //powerUp.destroy(); // Destruye el powerUp
+        player.speed *= 2; // Duplica la velocidad del jugador
+        this.activePowerUps--;
+        console.log("POWERUP SPEED x2")
+    }
     
 
     create() {
@@ -122,6 +130,11 @@ class PlayScene extends Phaser.Scene {
             this.enemies.add(enemy);  // Añade el enemigo al grupo
         }
 
+        // Dentro del método create()
+        this.powerUps = this.physics.add.staticGroup();
+        this.physics.add.collider(this.player, this.powerUps, this.collectPowerUp, null, this);
+        this.activePowerUps = 0;  // Número de powerups actualmente en pantalla
+
         this.initWorld();
 
         // Crea una base estática en la parte inferior del juego
@@ -148,5 +161,37 @@ class PlayScene extends Phaser.Scene {
             enemy.update();
         });
         
+        if (Phaser.Math.RND.between(0, 100) < 5 && this.activePowerUps < 5) { // 0.5% de probabilidad cada frame
+            
+            // Encuentra una plataforma aleatoria
+            let randomPlatform = Phaser.Utils.Array.GetRandom(this.platforms.getChildren());
+    
+            // Crea una nueva caja de potenciador en una posición aleatoria cerca de la plataforma
+            let x = randomPlatform.x;
+            let y = randomPlatform.y - 32 - 40;
+            console.log(`Aparece PowerUp ${x},${y}`);
+            let powerUp = this.powerUps.create(x, y, 'powerup-box');
+            this.powerUps.add(powerUp);
+            this.activePowerUps++;
+
+            // Crea un temporizador de eventos para hacer parpadear la caja de potenciador durante los últimos 2 segundos
+            this.time.delayedCall(5000, () => {
+                // Dentro de este bloque de código, estamos después de 3 segundos
+                // Entonces, crearemos un evento que hará que el powerup parpadee 10 veces durante 2 segundos
+                this.time.addEvent({
+                    delay: 350,
+                    repeat: 14,
+                    callback: () => {
+                        powerUp.setVisible(!powerUp.visible);
+                    }
+                });
+            });
+
+            // Crea un temporizador de eventos para eliminar la caja de potenciador después de 5 segundos
+            this.time.delayedCall(10000, () => {
+                powerUp.destroy();
+                this.activePowerUps--;
+            });
+        }
     }
 }
