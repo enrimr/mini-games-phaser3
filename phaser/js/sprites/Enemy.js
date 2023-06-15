@@ -84,4 +84,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.body.setOffset((this.width - width) / 2, (this.height - height) / 2);
         }
     }
+
+    isDead() {
+        return this.life <= 0;
+    }
 }

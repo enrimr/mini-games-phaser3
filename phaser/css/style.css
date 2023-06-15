@@ -1,1 +1,8 @@
-/* Tu código CSS aquí */
+body {
+    padding: 0;
+    margin: 0;
+}
+#game-container {
+    width: 100%;
+    height: 100%;
+}
